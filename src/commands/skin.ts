@@ -31,7 +31,7 @@ export async function skin(args: string[]) {
   try {
     await skin.load(`${baseUrl}/${p!.skin.name}.png`);
   } catch (_) {
-    console.error('This skin is invalid.');
+    console.error("This skin is invalid.");
     return;
   }
 
@@ -39,14 +39,12 @@ export async function skin(args: string[]) {
     skin.colorTee(
       new ColorCode(p.skin.color_body),
       new ColorCode(p.skin.color_feet)
-    )
+    );
   }
 
-  skin
-    .render()
-    .saveRenderAs(`${p.skin.name}.png`);
+  skin.render().saveRenderAs(`${p.skin.name}.png`);
 
-  let rendered = path.join(__dirname, "..", "..", `render_${p.skin.name}.png`);
+  let rendered = path.join(__dirname, "..", "..", `${p.skin.name}.png`);
 
   let cmd = `kitty +kitten icat ${rendered}`;
 

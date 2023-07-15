@@ -7,11 +7,11 @@
     "cheerio": "^1.0.0-rc.12",
     "node-fetch": "^2.0.0",
     "node-notifier": "^10.0.1",
-    "teeworlds-utilities": "^1.1.5",
+    "teeworlds-utilities": "^1.1.6",
     "terminal-kit": "^3.0.0"
   },
   "name": "@wocketwun/tw.ts",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "Teeworlds CLI",
   "main": "index.js",
   "repository": {
