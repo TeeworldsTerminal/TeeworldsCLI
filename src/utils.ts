@@ -2,6 +2,9 @@ import { existsSync, writeFileSync } from "fs";
 import path from "path";
 import { terminal } from "terminal-kit";
 import { ServerData } from ".";
+import { homedir } from "os";
+
+const CONFIG_PATH = path.join(homedir(), "twcli.json");
 
 export type JsonLayout = {
   friends: string[];
@@ -9,22 +12,17 @@ export type JsonLayout = {
 };
 
 export function setupJSON() {
-  let jsonPath = path.join(__dirname, "../config.json");
-
-  if (existsSync(jsonPath)) {
-    return require(jsonPath) as JsonLayout;
+  if (existsSync(CONFIG_PATH)) {
+    return require(CONFIG_PATH) as JsonLayout;
   } else {
-    writeFileSync(jsonPath, JSON.stringify({ friends: [], clans: [] }));
+    writeFileSync(CONFIG_PATH, JSON.stringify({ friends: [], clans: [] }));
     return { friends: [], clans: [] } as JsonLayout;
   }
 }
 
 // No error handling because im lazy
 export function writeFriends(friends: JsonLayout) {
-  writeFileSync(
-    path.join(__dirname, "../config.json"),
-    JSON.stringify(friends)
-  );
+  writeFileSync(CONFIG_PATH, JSON.stringify(friends));
 }
 
 export function getServerClient(data: ServerData, name: string) {
