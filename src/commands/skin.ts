@@ -1,11 +1,11 @@
 // Expiremental shit + will also only work on Kitty terminal afiak
 
-import { ColorCode, PersonalCard, Skin, SkinPart } from "teeworlds-utilities";
+import { ColorCode, Skin } from "teeworlds-utilities";
 import { ServerData, commandHandler, getData } from "..";
 import { getServerClient } from "../utils";
 import path from "path";
-import { unlinkSync, writeFileSync } from "fs";
-import { exec, execSync } from "child_process";
+import { unlinkSync } from "fs";
+import { execSync } from "child_process";
 
 commandHandler.register("skin", skin, {});
 
@@ -28,26 +28,23 @@ export async function skin(args: string[]) {
 
   let skin = new Skin();
 
-  let tmpPath = path.join(__dirname, "..", `${p.skin.name}-tmp.png`);
+  try {
+    await skin.load(`${baseUrl}/${p!.skin.name}.png`);
+  } catch (_) {
+    console.error('This skin is invalid.');
+    return;
+  }
 
-  writeFileSync(
-    tmpPath,
-    new Uint8Array(
-      await (await fetch(`${baseUrl}/${p!.skin.name}.png`)).arrayBuffer()
+  if (p.skin.color_body && p.skin.color_feet) {
+    skin.colorTee(
+      new ColorCode(p.skin.color_body),
+      new ColorCode(p.skin.color_feet)
     )
-  );
+  }
 
-  await skin.loadFromPath(tmpPath);
-
-  unlinkSync(tmpPath);
-
-  if (p.skin.color_body)
-    skin.colorPart(new ColorCode(p.skin.color_body), SkinPart.BODY);
-  // This errors dont know why and dont care
-  // if (p.skin.color_feet)
-  //   skin.colorPart(new ColorCode(p.skin.color_feet), SkinPart.FOOT);
-
-  skin.render().saveRenderAs(`${p.skin.name}.png`);
+  skin
+    .render()
+    .saveRenderAs(`${p.skin.name}.png`);
 
   let rendered = path.join(__dirname, "..", "..", `render_${p.skin.name}.png`);
 
