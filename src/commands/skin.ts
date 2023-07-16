@@ -6,6 +6,7 @@ import { getServerClient } from "../utils";
 import path from "path";
 import { existsSync, mkdirSync, unlinkSync, writeFileSync } from "fs";
 import { execSync } from "child_process";
+import { terminal } from "terminal-kit";
 
 commandHandler.register("skin", skin, {});
 
@@ -45,6 +46,10 @@ export async function skin(args: string[]) {
   let rendered = path.join(__dirname, "..", "..", `${p.skin.name}.png`);
 
   skin.render().saveRenderAs(rendered);
+
+  // terminal.drawImage(rendered, {
+  //   shrink: { width: terminal.width, height: terminal.height * 2 },
+  // });
 
   let cmd = `kitty +kitten icat ${rendered}`;
 

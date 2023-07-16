@@ -3,8 +3,15 @@
 ### Installation
 
 Download node from `nodejs.org`, npm should be packaged with it.  
-Once installed run "npm i -g @wocketwun/tw.ts" to install the cli.  
+Once installed run
+
+```
+npm i -g @wocketwun/tw.ts
+```
+
 https://www.npmjs.com/package/@wocketwun/tw.ts
+
+For a Terminal UI based version check out: https://github.com/WocketSesh/TeeworldsTUI
 
 ### Usage
 
