@@ -4,7 +4,7 @@ import { ColorCode, Skin } from "teeworlds-utilities";
 import { ServerData, commandHandler, getData } from "..";
 import { getServerClient } from "../utils";
 import path from "path";
-import { unlinkSync } from "fs";
+import { existsSync, mkdirSync, unlinkSync, writeFileSync } from "fs";
 import { execSync } from "child_process";
 
 commandHandler.register("skin", skin, {});
@@ -42,9 +42,9 @@ export async function skin(args: string[]) {
     );
   }
 
-  skin.render().saveRenderAs(`${p.skin.name}.png`);
-
   let rendered = path.join(__dirname, "..", "..", `${p.skin.name}.png`);
+
+  skin.render().saveRenderAs(rendered);
 
   let cmd = `kitty +kitten icat ${rendered}`;
 
