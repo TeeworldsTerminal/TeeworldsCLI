@@ -67,7 +67,7 @@ export let webScraper = new WebScraper();
 async function main() {
   await checkVersion();
 
-  if (!args.length || !commands.includes(args[0].toLowerCase())) {
+  if (!args.length) {
     console.log(help);
     process.exit(1);
   }
