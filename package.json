@@ -11,7 +11,7 @@
     "terminal-kit": "^3.0.0"
   },
   "name": "@wocketwun/tw.ts",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "Teeworlds CLI",
   "main": "index.js",
   "repository": {

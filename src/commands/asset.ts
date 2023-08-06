@@ -140,16 +140,16 @@ async function selectPart(
     autoCompleteMenu: true,
   }).promise;
 
+  if (x == "exit") {
+    terminal.green("\nExitting\n");
+    process.exit(1);
+  }
+
   if (!x || !names.includes(x)) {
     terminal.red("\nProvied invalid name\n");
 
     selectPart(skins, names, savePath);
     return;
-  }
-
-  if (x == "exit") {
-    terminal.green("\nExitting\n");
-    process.exit(1);
   }
 
   if (x != "base") {
