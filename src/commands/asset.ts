@@ -120,7 +120,7 @@ async function asset(args: string[]) {
 
   loadedNames.push("base");
 
-  selectPart(loaded, loadedNames, path.join(args[0], name));
+  selectPart(loaded, loadedNames, path.join(args[0], `${name}.png`));
 }
 
 async function selectPart(
