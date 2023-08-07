@@ -113,50 +113,54 @@ async function asset(args: string[]) {
     process.exit(0);
   }
 
-  copyFileSync(path.join(args[0], x), path.join(args[0], name as string));
+  copyFileSync(
+    path.join(args[0], x),
+    path.join(args[0], `${name}.png` as string)
+  );
 
   base = new Gameskin();
   base.load(path.join(args[0], name));
 
   loadedNames.push("base");
 
-  selectPart(loaded, loadedNames, path.join(args[0], `${name}.png`));
+  selectParts(loaded, loadedNames, path.join(args[0], `${name}.png`));
 }
 
-async function selectPart(
+async function selectParts(
   skins: { name: string; skin: Gameskin }[],
   names: string[],
   savePath: string
 ) {
-  if (curr == parts.length) {
-    terminal.green("\nFinished creating gameskin");
+  let cur = parts[0];
 
-    base?.saveAs(savePath);
-    process.exit(0);
+  for (let i = 0; i < parts.length; i++, cur = parts[i]) {
+    terminal.green(`\nSelect gameskin for ${cur}\n`);
+
+    let x = await terminal.inputField({
+      autoComplete: names,
+      autoCompleteMenu: true,
+    }).promise;
+
+    if (x == "exit") {
+      terminal.green("\nExitting\n");
+      process.exit(1);
+    }
+
+    if (!x || !names.includes(x)) {
+      terminal.red("\nProvied invalid name\n");
+
+      i--;
+      continue;
+    }
+
+    if (x != "base") {
+      let s = skins.find((y) => y.name == x);
+
+      base!.copyPart(s!.skin, parts[curr]);
+    }
   }
-  terminal.green(`\nSelect gameskin for part ${parts[curr]}\n`);
-  let x = await terminal.inputField({
-    autoComplete: names,
-    autoCompleteMenu: true,
-  }).promise;
 
-  if (x == "exit") {
-    terminal.green("\nExitting\n");
-    process.exit(1);
-  }
-
-  if (!x || !names.includes(x)) {
-    terminal.red("\nProvied invalid name\n");
-
-    selectPart(skins, names, savePath);
-    return;
-  }
-
-  if (x != "base") {
-    let s = skins.find((y) => y.name == x);
-
-    base!.copyPart(s!.skin, parts[curr]);
-  }
-  curr++;
-  selectPart(skins, names, savePath);
+  terminal.green("\nFinished creating gameskin\n");
+  base?.saveAs(savePath);
+  process.exit(0);
 }
