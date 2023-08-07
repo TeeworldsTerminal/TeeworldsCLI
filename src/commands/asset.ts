@@ -119,11 +119,95 @@ async function asset(args: string[]) {
   );
 
   base = new Gameskin();
-  base.load(path.join(args[0], name));
+  base.load(path.join(args[0], `${name}.png`));
+
+  loaded.push({ name: "base", skin: base });
 
   loadedNames.push("base");
 
-  selectParts(loaded, loadedNames, path.join(args[0], `${name}.png`));
+  let cs = [];
+
+  for (let i = 0; i < parts.length; i++) {
+    cs.push({ part: parts[i], skin: "base" });
+  }
+
+  terminal.green("\nWhat selection type would you like to use: \n");
+  let res = await terminal.singleLineMenu([
+    "Menu Version",
+    "Text Version",
+    "Exit",
+  ]).promise;
+
+  if (res.selectedIndex == 2) process.exit(0);
+
+  if (res.selectedIndex == 0)
+    return assetMenu(
+      loaded,
+      loadedNames,
+      path.join(args[0], `${name}.png`),
+      cs
+    );
+  else
+    return selectParts(loaded, loadedNames, path.join(args[0], `${name}.png`));
+}
+
+async function assetMenu(
+  skins: { name: string; skin: Gameskin }[],
+  names: string[],
+  savePath: string,
+  currentlySelected: { part: GameskinPart; skin: string }[] = []
+): Promise<void> {
+  terminal.eraseDisplay();
+  let res = await terminal.gridMenu([
+    ...currentlySelected.map((x) => `${x.part} - ${x.skin}`),
+    "",
+    "Save",
+    "",
+    "Exit",
+  ]).promise;
+
+  if (res.selectedText == undefined || res.selectedText == "Exit")
+    process.exit(0);
+
+  if (res.selectedText == "Save") {
+    terminal.green("\nFinished creating gameskin\n");
+    base?.saveAs(savePath);
+    process.exit(0);
+  }
+
+  if (res.selectedText == "") {
+    return assetMenu(skins, names, savePath, currentlySelected);
+  }
+
+  return selectPart(
+    skins,
+    names,
+    savePath,
+    parts[res.selectedIndex],
+    currentlySelected
+  );
+}
+
+async function selectPart(
+  skins: { name: string; skin: Gameskin }[],
+  names: string[],
+  savePath: string,
+  part: GameskinPart,
+  currentlySelected: { part: GameskinPart; skin: string }[]
+): Promise<void> {
+  terminal.eraseDisplay();
+
+  let res = await terminal.gridMenu([...names, "", "Exit"]).promise;
+
+  if (res.selectedText == undefined || res.selectedText == "Exit")
+    return assetMenu(skins, names, savePath);
+
+  currentlySelected.find((x) => x.part == part)!.skin = res.selectedText;
+  let sel = skins.find((x) => x.name == res.selectedText);
+
+  base!.copyPart(sel?.skin!, part);
+
+  return assetMenu(skins, names, savePath, currentlySelected);
 }
 
 async function selectParts(
