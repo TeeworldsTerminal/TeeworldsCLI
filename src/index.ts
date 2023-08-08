@@ -58,6 +58,9 @@ let help = `
       - remove
         [name]
       -list
+    - asset     (create / combine gameskins) (no repl support)
+      [path/to/assets]
+    - import    (import your ddnet friends list) (no repl support)
     - repl      (start the repl, recommended way to use)
 `;
 

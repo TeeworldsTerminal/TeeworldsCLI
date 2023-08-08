@@ -22,6 +22,13 @@ every command from the repl can have the starting "tw" omitted
 tw repl
 ```
 
+To create / combine gameskins (no repl)
+Your asset path would typically be <DDNetFolder>/assets/game
+
+```
+tw asset <path/to/assets>
+```
+
 To start or disable the notifier interval
 
 ```
